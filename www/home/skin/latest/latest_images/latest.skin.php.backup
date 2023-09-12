@@ -1,0 +1,201 @@
+<?php
+/* copyright(c) WEBsiting.co.kr */
+if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
+include_once(G5_LIB_PATH.'/thumbnail.lib.php');
+
+// add_stylesheet('css 구문', 출력순서); 숫자가 작을 수록 먼저 출력됨
+add_stylesheet('<link rel="stylesheet" href="'.$latest_skin_url.'/style.css">', 0);
+add_stylesheet('<link rel="stylesheet" href="'.$latest_skin_url.'/jquery.bxslider.css">', 0);
+add_javascript('<script src="'.G5_JS_URL.'/jquery.bxslider.js"></script>', 10);
+// $thumb_width = 955;
+// $thumb_height = 415;
+$thumb_width = 244;
+$thumb_height = 95;
+$list_count = (is_array($list) && $list) ? count($list) : 0;
+?>
+
+<div class="bannerImages bannerImages_<?php echo $board['bo_table']?>">
+    <h2 class="sound_only"><a href="<?php echo G5_BBS_URL ?>/board.php?bo_table=<?php echo $bo_table ?>"><?php echo $bo_subject ?></a></h2>
+    <ul>
+    <?php
+    for ($i=0; $i<$list_count; $i++) {
+    $thumb = get_list_thumbnail($bo_table, $list[$i]['wr_id'], $thumb_width, $thumb_height, false, true);
+
+    if($thumb['src']) {
+        $img = $thumb['src'];
+    } else {
+        $img = G5_IMG_URL.'/no_img.png';
+        $thumb['alt'] = '이미지가 없습니다.';
+    }
+    $img_content = '<img src="'.$img.'" alt="'.$thumb['alt'].'" >';
+    ?>
+        <li>
+            <i class="lt_img"><?php echo $img_content; ?></i>
+            <?php
+
+
+            if($list[$i]['wr_link1']){
+				echo "<a href=\"".$list[$i]['wr_link1']."\"> ";
+			} else {
+				echo '<a>';
+			}
+            if($list[$i]['subject'] == '제목없음') {
+				echo '<!-- 제목없음 -->';
+			} else {
+				echo "<b>";
+				echo $list[$i]['subject'];
+				echo "</b>";
+			}
+            echo "</a>";
+
+            ?>
+        </li>
+    <?php }  ?>
+    </ul>
+    <?php if (count($list) == 0) { //게시물이 없을 때  ?>
+    <p class="empty_li">등록된 내용이 없습니다.</p>
+    <?php }  ?>
+
+</div>
+<?php if (count($list)) { //게시물이 있다면 ?>
+<script>
+    var $slider1;
+    var $slider2;
+    // 메인 4섹션 1번배너
+function buildSliderConfiguration1() {
+    var deviceWidth1 = $(window).width();
+    /* 반응형으로 설정할 옵션 정의 */
+    var slideNum1;
+    /* 화면 사이즈별 슬라이드 갯수, 마진 설정, 기타 옵션도 설정 가능 */
+    if (deviceWidth1 < 768) {
+        slideNum1 = 3;
+    }
+    else if (deviceWidth1 < 960) {
+        slideNum1 = 4;
+    }
+    else {
+        slideNum1 = 6;
+    }
+    return {
+        hideControlOnEnd: true,
+        infiniteLoop: true,
+        slideMargin: 30,
+        auto: true,
+        pager:false,
+        moveSlides: 1,     // 슬라이드 이동시 개수
+        slideWidth: 244,   // 슬라이드 너비
+        minSlides: slideNum1,  /*반응형 옵션*/
+        maxSlides: slideNum1,
+
+        speed: 9000,
+        /*반응형 옵션*/
+        // onSlideAfter: function() {
+        //   slider1.stopAuto();
+        //   slider1.startAuto();
+        // }
+    };
+}
+function configureSlider1() {
+    var config1 = buildSliderConfiguration1();
+
+    if ($slider1 && $slider1.reloadSlider) {
+        $slider1.reloadSlider(config1);
+    } else {
+        $slider1 = $('#main_04 .main_partner .main_banner01 .bannerImages_<?php echo $board['bo_table']?> ul').bxSlider(config1);  /* 슬라이더 클래스 또는 아이디 입력 */
+    }
+}
+
+
+$(window).on("orientationchange resize", configureSlider1);
+configureSlider1();
+
+// 메인 4섹션 2번배너
+function buildSliderConfiguration2() {
+var deviceWidth2 = $(window).width();
+/* 반응형으로 설정할 옵션 정의 */
+var slideNum2;
+/* 화면 사이즈별 슬라이드 갯수, 마진 설정, 기타 옵션도 설정 가능 */
+if (deviceWidth2 < 768) {
+    slideNum2 = 3;
+    hideControlOnEnd = true;
+    slideMargin = 30;
+    infiniteLoop = true;
+    auto = true;
+    pager = false;
+    moveSlides = 1;     // 슬라이드 이동시 개수
+    slideWidth = 244;   // 슬라이드 너비
+    minSlides = slideNum2;  /*반응형 옵션*/
+    maxSlides = slideNum2;
+    ticker = true;
+    useCSS = true;
+    easing = 'linear';
+    speed = 9000;
+}
+else if (deviceWidth2 < 960) {
+    slideNum2 = 4;
+    hideControlOnEnd = true;
+    slideMargin = 30;
+    infiniteLoop = true;
+    auto = true;
+    pager = false;
+    moveSlides = 1;     // 슬라이드 이동시 개수
+    slideWidth = 244;   // 슬라이드 너비
+    minSlides = slideNum2;  /*반응형 옵션*/
+    maxSlides = slideNum2;
+    ticker = true;
+    useCSS = true;
+    easing = 'linear';
+    speed = 9000;
+}
+else {
+    slideNum2 = 6;
+    hideControlOnEnd = true;
+    slideMargin = 30;
+    infiniteLoop = true;
+    auto = true;
+    pager = false;
+    moveSlides = 1;     // 슬라이드 이동시 개수
+    slideWidth = 244;   // 슬라이드 너비
+    minSlides = slideNum2;  /*반응형 옵션*/
+    maxSlides = slideNum2;
+    ticker = true;
+    useCSS = true;
+    easing = 'linear';
+    speed = 9000;
+}
+return {
+    hideControlOnEnd: true,
+    slideMargin: 30,
+    infiniteLoop: true,
+    auto: true,
+    pager:false,
+    moveSlides: 1,     // 슬라이드 이동시 개수
+    slideWidth: 244,   // 슬라이드 너비
+    minSlides: slideNum2,  /*반응형 옵션*/
+    maxSlides: slideNum2,
+    ticker: true,
+    useCSS:true,
+    easing: 'linear',
+    speed: 9000,
+  /*반응형 옵션*/
+    // onSlideAfter: function() {
+    //   slider2.stopAuto();
+    //   slider2.startAuto();
+    // }
+};
+}
+function configureSlider2() {
+var config2 = buildSliderConfiguration2();
+
+if ($slider2 && $slider2.reloadSlider) {
+    $slider2.reloadSlider(config2);
+} else {
+    $slider2 = $('#main_04 .main_partner .main_banner02 .bannerImages_<?php echo $board['bo_table']?> ul').bxSlider(config2);  /* 슬라이더 클래스 또는 아이디 입력 */
+}
+}
+
+
+$(window).on("orientationchange resize", configureSlider2);
+configureSlider2();
+</script>
+<?php } ?>
